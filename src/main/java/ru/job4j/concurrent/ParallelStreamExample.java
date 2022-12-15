@@ -10,7 +10,7 @@ public class ParallelStreamExample {
         List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
         Stream<Integer> stream = list.parallelStream();
         System.out.println(stream.isParallel());
-        Optional<Integer> multiplication = stream.reduce((a,b) -> a * b);
+        Optional<Integer> multiplication = stream.reduce((a, b) -> a * b);
         System.out.println(multiplication.get());
         System.out.println("peek:");
         list.stream().parallel().peek(System.out::println).collect(Collectors.toList());
