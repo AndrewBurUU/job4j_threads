@@ -38,22 +38,22 @@ public class Wget implements Runnable {
 
     @Override
     public void run() {
-        LocalDateTime timeStartDownLoad = LocalDateTime.now();
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(downLoadFileName)) {
             byte[] dataBuffer = new byte[BYTESPERSECOND];
             int bytesRead;
             int downloadData = 0;
+            LocalDateTime timeStartDownLoad = LocalDateTime.now();
             while ((bytesRead = in.read(dataBuffer, 0, BYTESPERSECOND)) != -1) {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
                 downloadData += bytesRead;
-                long timeDifference = ChronoUnit.MILLIS.between(timeStartDownLoad, LocalDateTime.now());
-                if (downloadData == BYTESPERSECOND) {
+                if (downloadData >= BYTESPERSECOND) {
+                    long timeDifference = ChronoUnit.MILLIS.between(timeStartDownLoad, LocalDateTime.now());
                     if (timeDifference < 1000) {
                         Thread.sleep(1000 - timeDifference);
-                        downloadData = 0;
-                        timeStartDownLoad = LocalDateTime.now();
                     }
+                    downloadData = 0;
+                    timeStartDownLoad = LocalDateTime.now();
                 }
             }
         } catch (IOException | InterruptedException e) {
