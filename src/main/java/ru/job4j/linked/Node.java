@@ -1,6 +1,6 @@
 package ru.job4j.linked;
 
-public class Node<T> {
+public final class Node<T> {
     private final Node<T> next;
     private final T value;
 
@@ -13,19 +13,7 @@ public class Node<T> {
         return next;
     }
 
-    public void setNext(Node<T> next) {
-        throw new IllegalStateException(
-                String.format("Could not setNext in Immutable class!")
-        );
-    }
-
     public T getValue() {
         return value;
-    }
-
-    public void setValue(T value) {
-        throw new IllegalStateException(
-                String.format("Could not setValue in Immutable class!")
-        );
     }
 }
