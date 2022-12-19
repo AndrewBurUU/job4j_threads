@@ -19,12 +19,13 @@ public class ShareNotSafe {
                         user.setName("second");
                     }
                 }
+                
         );
         first.start();
         second.start();
         first.join();
         second.join();
         /** System.out.println(cache.findById(1).getName());*/
-        cache.findAll().forEach(user1 -> System.out.println(user1.getName()));
+        cache.findAll().forEach(mainUser -> System.out.println(mainUser.getName()));
     }
 }
