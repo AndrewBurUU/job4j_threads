@@ -1,7 +1,6 @@
 package ru.job4j.visibility;
 
 import java.io.*;
-import java.util.function.*;
 
 public class FileOperations {
 
@@ -11,26 +10,15 @@ public class FileOperations {
         this.file = file;
     }
 
-    public synchronized String content(Predicate<Integer> filter) throws IOException {
-        BufferedReader i = new BufferedReader(new FileReader(file));
-        String output = "";
-        int data;
-        while ((data = i.read()) > 0) {
-            if (filter.test(data)) {
-                output += (char) data;
-            }
-        }
-        return output;
-    }
-
-    public synchronized void saveContent(String content) throws IOException {
-        PrintWriter o = new PrintWriter(
+    public synchronized void saveContent(String content) {
+        try (PrintWriter o = new PrintWriter(
                 new BufferedOutputStream(
-                        new FileOutputStream(file)
-                ));
-        for (int i = 0; i < content.length(); i += 1) {
-            o.write(content.charAt(i));
+                        new FileOutputStream(file)))) {
+            for (int i = 0; i < content.length(); i++) {
+                o.write(content.charAt(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
 }
