@@ -61,11 +61,11 @@ class AccountStorageTest {
     }
 
     @Test
-    void whenTransferToUnknown() {
+    void whenTransferGreaterThanHaving() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.add(new Account(2, 100));
-        storage.transfer(1, 3, 50);
+        storage.transfer(1, 2, 150);
         var firstAccount = storage.getById(1)
                 .orElseThrow(() -> new IllegalStateException("Not found account by id = 1"));
         var secondAccount = storage.getById(2)
