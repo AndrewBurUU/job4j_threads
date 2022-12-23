@@ -1,39 +1,43 @@
 package ru.job4j.wait;
 
-import org.junit.jupiter.api.*;
+import java.util.Arrays;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.IntStream;
 
+import org.junit.jupiter.api.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Disabled
-class SimpleBlockingQueueTest {
-
+public class SimpleBlockingQueueTest {
     @Test
-    void whenProducerOffer() throws InterruptedException {
-        int expected = 1;
-        int res = 0;
-        SimpleBlockingQueue<Integer> simpleBlockingQueue = new SimpleBlockingQueue<Integer>(1);
+    public void whenFetchAllThenGetIt() throws InterruptedException {
+        int count = 5;
+        final CopyOnWriteArrayList<Integer> buffer = new CopyOnWriteArrayList<>();
+        final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(count);
         Thread producer = new Thread(
                 () -> {
-                    try {
-                        simpleBlockingQueue.offer(expected);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                },
-                "Producer"
-        );
-        Thread customer = new Thread(
-                () -> {
-                    /**res = simpleBlockingQueue.poll();*/
-                    System.out.println(res);
-                },
-                "Customer"
+                    IntStream.range(0, count).forEach(
+                            queue::offer
+                    );
+                }
         );
         producer.start();
-        customer.start();
+        Thread consumer = new Thread(
+                () -> {
+                    while (!queue.isEmpty() || !Thread.currentThread().isInterrupted()) {
+                        try {
+                            buffer.add(queue.poll());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                }
+        );
+        consumer.start();
         producer.join();
-        customer.join();
-        assertThat(res).isEqualTo(expected);
+        consumer.interrupt();
+        consumer.join();
+        assertThat(buffer).isEqualTo(Arrays.asList(0, 1, 2, 3, 4));
     }
-
 }
