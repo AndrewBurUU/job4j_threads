@@ -11,7 +11,7 @@ class SimpleBlockingQueueTest {
     void whenProducerOffer() throws InterruptedException {
         int expected = 1;
         int res = 0;
-        SimpleBlockingQueue simpleBlockingQueue = new SimpleBlockingQueue();
+        SimpleBlockingQueue<Integer> simpleBlockingQueue = new SimpleBlockingQueue<Integer>();
         Thread producer = new Thread(
                 () -> {
                     simpleBlockingQueue.offer(expected);
