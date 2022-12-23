@@ -31,4 +31,8 @@ public class SimpleBlockingQueue<T> {
         this.notifyAll();
         return res;
     }
+
+    public Queue<T> getQueue() {
+        return queue;
+    }
 }
