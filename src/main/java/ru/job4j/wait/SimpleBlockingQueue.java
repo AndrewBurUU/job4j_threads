@@ -11,14 +11,24 @@ public class SimpleBlockingQueue<T> {
 
     private int count;
 
-    public synchronized void offer(T value) {
-            queue.add(value);
-            this.notifyAll();
+    public SimpleBlockingQueue(int count) {
+        this.count = count;
+    }
+
+    public synchronized void offer(T value) throws InterruptedException {
+        while (queue.size() == count) {
+            this.wait();
+        }
+        queue.add(value);
+        this.notifyAll();
     }
 
     public synchronized T poll() throws InterruptedException {
-       T res = queue.poll();
-       this.notifyAll();
-       return res;
+        while (queue.isEmpty()) {
+            this.wait();
+        }
+        T res = queue.poll();
+        this.notifyAll();
+        return res;
     }
 }

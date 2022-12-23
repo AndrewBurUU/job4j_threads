@@ -11,10 +11,14 @@ class SimpleBlockingQueueTest {
     void whenProducerOffer() throws InterruptedException {
         int expected = 1;
         int res = 0;
-        SimpleBlockingQueue<Integer> simpleBlockingQueue = new SimpleBlockingQueue<Integer>();
+        SimpleBlockingQueue<Integer> simpleBlockingQueue = new SimpleBlockingQueue<Integer>(1);
         Thread producer = new Thread(
                 () -> {
-                    simpleBlockingQueue.offer(expected);
+                    try {
+                        simpleBlockingQueue.offer(expected);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 },
                 "Producer"
         );
