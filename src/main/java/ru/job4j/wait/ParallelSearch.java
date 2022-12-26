@@ -7,13 +7,10 @@ public class ParallelSearch {
         final Thread consumer = new Thread(
                 () -> {
                     try {
-                        int i = 0;
-                        while (i < count) {
+                        while (true) {
                             System.out.println(queue.poll());
-                            i++;
                         }
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
                         Thread.currentThread().interrupt();
                     }
                 }
@@ -33,5 +30,6 @@ public class ParallelSearch {
                 }
 
         ).start();
+        consumer.interrupt();
     }
 }
