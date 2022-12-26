@@ -32,7 +32,7 @@ public class SimpleBlockingQueue<T> {
         return res;
     }
 
-    public Queue<T> getQueue() {
-        return queue;
+    public synchronized boolean isEmpty() {
+        return queue.size() == 0;
     }
 }
