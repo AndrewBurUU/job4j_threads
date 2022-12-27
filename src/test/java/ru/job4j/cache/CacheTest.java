@@ -25,12 +25,11 @@ class CacheTest {
     @Test
     public void whenUpdate() {
         Cache cache = new Cache();
-        Base first = new Base(1, 0);
-        first.setName("first");
-        Base second = new Base(1, 0);
-        second.setName("second");
-        cache.add(first);
-        cache.update(second);
-        assertThat(cache.getModelById(1)).isEqualTo(second);
+        Base firstEdition = new Base(1, 1);
+        firstEdition.setName("first");
+        Base secondEdition = new Base(1, 2);
+        cache.add(firstEdition);
+        cache.update(firstEdition);
+        assertThat(cache.getModelById(1).getVersion()).isEqualTo(2);
     }
 }
