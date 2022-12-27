@@ -6,8 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Cache {
     private final Map<Integer, Base> memory = new ConcurrentHashMap<>();
 
-    private int count;
-
     public boolean add(Base model) {
         return memory.putIfAbsent(model.getId(), model) == null;
     }
