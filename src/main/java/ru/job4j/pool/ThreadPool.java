@@ -14,10 +14,12 @@ public class ThreadPool {
         for (int i = 0; i < SIZE; i++) {
             Thread thread = new Thread(
                     () -> {
-                        try {
-                            tasks.poll();
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
+                        while (!Thread.currentThread().isInterrupted()) {
+                            try {
+                                tasks.poll();
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
                         }
                     }
             );
