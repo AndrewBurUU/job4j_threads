@@ -7,7 +7,7 @@ public class EmailNotification {
     private static final String SUBJECT_TEMPLATE = "Notification %s to email %s";
     private static final String BODY_TEMPLATE = "Add a new event to %s";
 
-    private ExecutorService pool = Executors.newFixedThreadPool(
+    private final ExecutorService pool = Executors.newFixedThreadPool(
             Runtime.getRuntime().availableProcessors()
     );
 
