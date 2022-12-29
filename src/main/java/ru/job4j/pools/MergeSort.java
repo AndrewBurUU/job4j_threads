@@ -8,8 +8,8 @@ public class MergeSort {
     }
 
     private static int[] sort(int[] array, int from, int to) {
-        // при следующем условии, массив из одного элемента
-        // делить нечего, возвращаем элемент
+        /** при следующем условии, массив из одного элемента
+        /* делить нечего, возвращаем элемент*/
         if (from == to) {
             return new int[] {array[from]};
         }
@@ -25,7 +25,7 @@ public class MergeSort {
         );
     }
 
-    // Метод объединения двух отсортированных массивов
+    /** Метод объединения двух отсортированных массивов*/
     public static int[] merge(int[] left, int[] right) {
         int li = 0;
         int ri = 0;
