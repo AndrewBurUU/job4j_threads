@@ -2,20 +2,22 @@ package ru.job4j.pools;
 
 import java.util.concurrent.*;
 
-public class SearchObjectIndex<T> extends RecursiveTask<Integer> {
+class SearchObjectIndex<T> extends RecursiveTask<Integer> {
 
     private final T[] array;
     private final int from;
     private final int to;
+    private final T object;
 
-    public SearchObjectIndex(T[] array, int from, int to) {
+    public SearchObjectIndex(T[] array, T object, int from, int to) {
         this.array = array;
         this.from = from;
         this.to = to;
+        this.object = object;
     }
 
     private int search10(T t) {
-        for (int i = 0; i < array.length; i++) {
+        for (int i = from; i < to; i++) {
             if (t.equals(array[i])) {
                 return i;
             }
@@ -25,21 +27,24 @@ public class SearchObjectIndex<T> extends RecursiveTask<Integer> {
 
     @Override
     protected Integer compute() {
-        if (from == to) {
-            return 0;
+        if (to - from <= 10) {
+            return search10(object);
         }
         int mid = (from + to) / 2;
-        SearchObjectIndex<T> leftSearch = new SearchObjectIndex<>(array, from, mid);
-        SearchObjectIndex<T> rightSearch = new SearchObjectIndex<>(array, mid + 1, to);
+        SearchObjectIndex<T> leftSearch = new SearchObjectIndex<>(array, object, from, mid);
+        SearchObjectIndex<T> rightSearch = new SearchObjectIndex<>(array, object, mid + 1, to);
         leftSearch.fork();
         rightSearch.fork();
         int left = leftSearch.join();
         int right = rightSearch.join();
-        return left >= 0 ? left : right;
+        return Math.max(left, right);
     }
 
     public int search(T[] array) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        return forkJoinPool.invoke(new SearchObjectIndex<T>(array, 0, array.length - 1));
+        return forkJoinPool.invoke(new SearchObjectIndex<T>(array, object, 0, array.length - 1));
     }
 }
+
+
+

@@ -1,4 +1,4 @@
-package ru.job4j.pools;
+package ru.job4j.pools.sort;
 
 /** реализация рекурсивной сортировки слиянием без распараллеливания (merge sort) */
 public class MergeSort {
