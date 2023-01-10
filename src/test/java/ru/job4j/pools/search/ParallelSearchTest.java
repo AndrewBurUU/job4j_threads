@@ -34,4 +34,12 @@ class ParallelSearchTest {
         assertThat(ParallelSearch.search(array, "100")).isEqualTo(-1);
     }
 
+    @Test
+    void whenFindLastElement() {
+        Object[] array = new Object[] {"3", "4", "5", "2", "8",
+                "7", "65", "43", "11", "12",
+                "34", "56"};
+        assertThat(ParallelSearch.search(array, "56")).isEqualTo(11);
+    }
+
 }
