@@ -1,4 +1,4 @@
-package ru.job4j.pools;
+package ru.job4j.pools.completablefuture;
 
 import java.util.concurrent.*;
 

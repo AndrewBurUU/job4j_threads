@@ -1,6 +1,7 @@
 package ru.job4j.pools;
 
 import org.junit.jupiter.api.Test;
+import ru.job4j.pools.completablefuture.*;
 
 import java.util.concurrent.*;
 
