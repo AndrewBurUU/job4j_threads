@@ -53,7 +53,7 @@ public class GoToShop {
 
     public static void thenComposeExample() throws Exception {
         CompletableFuture<String> result = goToTrash().thenCompose(a -> buyProduct("Milk"));
-        result.get(); // wait calculations;
+        result.get(); /** wait calculations;*/
     }
 
     public static void thenCombineExample() throws Exception {
