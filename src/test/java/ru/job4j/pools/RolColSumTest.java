@@ -12,7 +12,7 @@ class RolColSumTest {
     @Test
     void whenSequence() {
         int[][] array = {{5, 1, 6}, {8, 2, 3}, {4, 1, 0}};
-        RolColSum.Sums[] res = RolColSum.sum(array);
+        Sums[] res = RolColSum.sum(array);
         assertThat(res[0].getRowSum()).isEqualTo(12);
         assertThat(res[1].getRowSum()).isEqualTo(13);
         assertThat(res[2].getRowSum()).isEqualTo(5);
@@ -24,7 +24,7 @@ class RolColSumTest {
     @Test
     void whenAsync() throws ExecutionException, InterruptedException {
         int[][] array = {{5, 1, 6}, {8, 2, 3}, {4, 1, 0}};
-        RolColSum.Sums[] res = RolColSum.asyncSum(array);
+        Sums[] res = RolColSum.asyncSum(array);
         assertThat(res[0].getRowSum()).isEqualTo(12);
         assertThat(res[1].getRowSum()).isEqualTo(13);
         assertThat(res[2].getRowSum()).isEqualTo(5);

@@ -3,43 +3,19 @@ package ru.job4j.pools.completablefuture;
 import java.util.concurrent.*;
 
 public class RolColSum {
-    public static class Sums {
-        private int rowSum;
-        private int colSum;
-
-        public int getRowSum() {
-            return rowSum;
-        }
-
-        public int getColSum() {
-            return colSum;
-        }
-
-        public void setRowSum(int rowSum) {
-            this.rowSum = rowSum;
-        }
-
-        public void setColSum(int colSum) {
-            this.colSum = colSum;
-        }
-    }
 
     public static Sums[] sum(int[][] matrix) {
         Sums[] res = new Sums[matrix.length];
         for (int i = 0; i < matrix.length; i++) {
-            int sum = 0;
+            int rowSum = 0;
+            int colSum = 0;
             for (int j = 0; j < matrix.length; j++) {
-                sum += matrix[i][j];
+                rowSum += matrix[i][j];
+                colSum += matrix[j][i];
             }
             res[i] = new Sums();
-            res[i].setRowSum(sum);
-        }
-        for (int j = 0; j < matrix.length; j++) {
-            int sum = 0;
-            for (int i = 0; i < matrix.length; i++) {
-                sum += matrix[i][j];
-            }
-           res[j].setColSum(sum);
+            res[i].setRowSum(rowSum);
+            res[i].setColSum(colSum);
         }
         return res;
     }
@@ -49,30 +25,21 @@ public class RolColSum {
         Sums[] res = new Sums[n];
         for (int i = 0; i < n; i++) {
             res[i] = new Sums();
-        }
-        for (int i = 0; i < n; i++) {
-            res[i].setRowSum(getRowSum(matrix, 0, n, i).get());
-            res[i].setColSum(getColSum(matrix, 0, n, i).get());
+            res[i].setRowSum(getTask(matrix, 0, n, i, true).get());
+            res[i].setColSum(getTask(matrix, 0, n, i, false).get());
         }
         return res;
     }
 
-    public static CompletableFuture<Integer> getRowSum(int[][] data, int startCol, int endCol, int row) {
-        return CompletableFuture.supplyAsync(() -> {
-            int sum = 0;
-            for (int j = startCol; j < endCol; j++) {
-                sum += data[row][j];
-                }
-                return sum;
-            }
-       );
-    }
-
-    public static CompletableFuture<Integer> getColSum(int[][] data, int startRow, int endRow, int col) {
+    public static CompletableFuture<Integer> getTask(int[][] data, int start, int end, int index, boolean row) {
         return CompletableFuture.supplyAsync(() -> {
                     int sum = 0;
-                    for (int i = startRow; i < endRow; i++) {
-                        sum += data[i][col];
+                    for (int i = start; i < end; i++) {
+                        if (row) {
+                            sum += data[index][i];
+                        } else {
+                            sum += data[i][index];
+                        }
                     }
                     return sum;
                 }
