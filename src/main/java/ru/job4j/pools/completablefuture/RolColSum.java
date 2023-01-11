@@ -1,49 +1,44 @@
 package ru.job4j.pools.completablefuture;
 
+import java.util.*;
 import java.util.concurrent.*;
 
 public class RolColSum {
 
     public static Sums[] sum(int[][] matrix) {
-        Sums[] res = new Sums[matrix.length];
-        for (int i = 0; i < matrix.length; i++) {
-            int rowSum = 0;
-            int colSum = 0;
-            for (int j = 0; j < matrix.length; j++) {
-                rowSum += matrix[i][j];
-                colSum += matrix[j][i];
-            }
-            res[i] = new Sums();
-            res[i].setRowSum(rowSum);
-            res[i].setColSum(colSum);
+        int n = matrix.length;
+        Sums[] rsl = new Sums[n];
+        for (int row = 0; row < n; row++) {
+            rsl[row] = getSums(matrix, row);
         }
-        return res;
+        return rsl;
     }
 
     public static Sums[] asyncSum(int[][] matrix) throws ExecutionException, InterruptedException {
         int n = matrix.length;
-        Sums[] res = new Sums[n];
-        for (int i = 0; i < n; i++) {
-            res[i] = new Sums();
-            res[i].setRowSum(getTask(matrix, 0, n, i, true).get());
-            res[i].setColSum(getTask(matrix, 0, n, i, false).get());
+        Sums[] rsl = new Sums[n];
+        Map<Integer, CompletableFuture<Sums>> futures = new HashMap<>();
+        for (int row = 0; row < n; row++) {
+            futures.put(row, getTask(matrix, row));
         }
-        return res;
+        for (int i = 0; i < rsl.length; i++) {
+            rsl[i] = futures.get(i).get();
+        }
+        return rsl;
     }
 
-    public static CompletableFuture<Integer> getTask(int[][] data, int start, int end, int index, boolean row) {
-        return CompletableFuture.supplyAsync(() -> {
-                    int sum = 0;
-                    for (int i = start; i < end; i++) {
-                        if (row) {
-                            sum += data[index][i];
-                        } else {
-                            sum += data[i][index];
-                        }
-                    }
-                    return sum;
-                }
-        );
+    private static Sums getSums(int[][] matrix, int row) {
+        int rowRsl = 0;
+        int colRsl = 0;
+        for (int cell = 0; cell < matrix.length; cell++) {
+            rowRsl += matrix[row][cell];
+            colRsl += matrix[cell][row];
+        }
+        return new Sums(rowRsl, colRsl);
+    }
+
+    private static CompletableFuture<Sums> getTask(int[][] matrix, int row) {
+        return CompletableFuture.supplyAsync(() -> getSums(matrix, row));
     }
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {

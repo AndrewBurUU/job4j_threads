@@ -5,6 +5,11 @@ public class Sums {
     private int rowSum;
     private int colSum;
 
+    public Sums(int rowSum, int colSum) {
+        this.rowSum = rowSum;
+        this.colSum = colSum;
+    }
+
     public int getRowSum() {
         return rowSum;
     }
